@@ -8,6 +8,7 @@ codes = np.genfromtxt('just_the_codes.txt', dtype=str)
 
 def tweet_to_codes(tweet):
     out = []
+    tweetcond = tweet.replace(';', '')
     tweetcond = tweet.replace('&gt', '>')
   #  words = re.findall(r"[\w']+", tweet)
     tweetcond = tweetcond.replace(' -> ', '->')
