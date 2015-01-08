@@ -46,7 +46,7 @@ def airports_to_co2(airport1, airport2):
 
     return co2
 
+if __name__ == "__main__":
+    co2 = airports_to_co2(sys.argv[1], sys.argv[2])
 
-co2 = airports_to_co2(sys.argv[1], sys.argv[2])
-
-print co2
+    print co2
