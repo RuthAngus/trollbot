@@ -6,6 +6,8 @@ import time
 import tweepy
 from emissions import airports_to_co2
 from tweet_to_codes import tweet_to_codes
+import ConfigParser
+from nomad import nomad_finder
 
 # Twitter API settings.
 url = "https://stream.twitter.com/1.1/statuses/filter.json"
@@ -67,33 +69,55 @@ def monitor():
 
         time.sleep(wait)
 
-def tweet(emission):
+def tweet(emission, codes):
 
     config = ConfigParser.ConfigParser()
-    config.read("local.cfg")
     sect = "twitter"
 
     print("Posting to twitter...")
-    auth = tweepy.OAuthHandler(config.get(sect, "consumer_key"),
-                               config.get(sect, "consumer_secret"))
-    auth.set_access_token(config.get(sect, "user_key"),
-                          config.get(sect, "user_secret"))
+    auth = tweepy.OAuthHandler(client_key, client_secret)
+    auth.set_access_token(user_key, user_secret)
     api = tweepy.API(auth)
 
-    sent = "Your total carbon emissions are %s Kg"
-    api.update_status(sent)
+    sent = "I hear you're flying between %s and %s. Your carbon emissions will be %s Kg." \
+            % (codes[0], codes[1], int(emission))
+    print sent
+
+    time.sleep(5*60)
+#     api.update_status(sent)
+
+def nomad_tweet():
+    config = ConfigParser.ConfigParser()
+    sect = "twitter"
+    print("Posting to twitter...")
+    auth = tweepy.OAuthHandler(client_key, client_secret)
+    auth.set_access_token(user_key, user_secret)
+    api = tweepy.API(auth)
+    trolls = np.genfromtxt("trollolol.txt", dtype=str)
+    sent = "%s" % trolls[np.randint(0, len(trolls))]
+    print sent
+    time.sleep(5*60)
+#     api.update_status(sent)
+
 
 if __name__ == "__main__":
 
     for o in monitor():
+
         if o["lang"] == "en":
             text = o["text"]
-            print text
-            codes = tweet_to_codes(text)
-            print codes
-            if len(codes) > 1:
-                emission = airports_to_co2(codes[0], codes[1])
-                print emission
+            if nomad_finder(text) == True:
+                nomad_tweet()
 
-    #         tweet(emission)
-                raw_input('enter')
+            codes = tweet_to_codes(text)
+
+            if len(codes) == 2 and codes[0] != codes[1]:
+                emission = airports_to_co2(codes[0], codes[1])
+
+                if emission > 0:
+                    print text
+                    print codes
+                    print emission
+
+                    tweet(emission, codes)
+                    raw_input('enter')
