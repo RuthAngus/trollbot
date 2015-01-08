@@ -5,9 +5,9 @@ codes = np.genfromtxt('just_the_codes.txt', dtype=str)
 
 print codes
 
-out = []
 
 def tweet_to_codes(tweet):
+    out = []
     words = re.findall(r"[\w']+", tweet)
 
     for i in words:

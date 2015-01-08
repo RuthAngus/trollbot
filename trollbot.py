@@ -86,12 +86,14 @@ def tweet(emission):
 if __name__ == "__main__":
 
     for o in monitor():
-        text = o["text"]
-        print text
-        codes = tweet_to_codes(text)
-        print codes
-        emission = airports_to_co2(codes[0], codes[1])
-        print emission
+        if o["lang"] == "en":
+            text = o["text"]
+            print text
+            codes = tweet_to_codes(text)
+            print codes
+            if len(codes) > 1:
+                emission = airports_to_co2(codes[0], codes[1])
+                print emission
 
-#         tweet(emission)
-        raw_input('enter')
+    #         tweet(emission)
+                raw_input('enter')
