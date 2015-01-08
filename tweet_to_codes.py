@@ -16,7 +16,7 @@ def tweet_to_codes(tweet):
    
     for i in xrange(len(words)):
         words_sh = words[i].replace('>','').split('-')
-        print words_sh
+     #   print words_sh
         for j in xrange(1, len(words_sh)):
             if (words_sh[i-1] in codes) and (words_sh[i] in codes):
                 out.append(words_sh[i-1])
