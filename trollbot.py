@@ -3,12 +3,17 @@ import requests
 import json
 from requests_oauthlib import OAuth1
 import time
+import tweepy
+from emissions import airports_to_co2
+from tweet_to_codes import tweet_to_codes
 
 # Twitter API settings.
 url = "https://stream.twitter.com/1.1/statuses/filter.json"
 client_key, client_secret, user_key, user_secret = \
         np.genfromtxt("keys.txt", skip_header=1, dtype=str).T
-params = {"track": "pizza"}
+
+iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
+params = {"track": iapa[:100]}
 
 def monitor():
     wait = 0
@@ -62,8 +67,33 @@ def monitor():
 
         time.sleep(wait)
 
+def tweet(emission):
+
+    config = ConfigParser.ConfigParser()
+    config.read("local.cfg")
+    sect = "twitter"
+
+    print("Posting to twitter...")
+    auth = tweepy.OAuthHandler(config.get(sect, "consumer_key"),
+                               config.get(sect, "consumer_secret"))
+    auth.set_access_token(config.get(sect, "user_key"),
+                          config.get(sect, "user_secret"))
+    api = tweepy.API(auth)
+
+    sent = "Your total carbon emissions are %s Kg"
+    api.update_status(sent)
+
 if __name__ == "__main__":
 
     for o in monitor():
-        print(o)
-        assert 0
+        if o["lang"] == "en":
+            text = o["text"]
+            print text
+            codes = tweet_to_codes(text)
+            print codes
+            if len(codes) > 1:
+                emission = airports_to_co2(codes[0], codes[1])
+                print emission
+
+    #         tweet(emission)
+                raw_input('enter')
