@@ -5,7 +5,7 @@ from requests_oauthlib import OAuth1
 import time
 
 # Twitter API settings.
-url = "https://stream.twitter.com/1.1/statuses/sample.json"
+url = "https://stream.twitter.com/1.1/statuses/filter.json"
 client_key, client_secret, user_key, user_secret = \
         np.genfromtxt("keys.txt", skip_header=1, dtype=str).T
 params = {"track": "pizza"}
@@ -16,16 +16,8 @@ def monitor():
     while 1:
         try:
             try:
-                r = requests.get(url, params=params, auth=auth, stream=True,
+                r = requests.post(url, data=params, auth=auth, stream=True,
                                  timeout=90)
-
-#                 from TwitterAPI import TwitterAPI
-#                 api = TwitterAPI(client_key, client_secret, user_key,
-#                                  user_secret)
-#                 r = api.request('search/tweets', {'q':'pizza'})
-#                 for item in r:
-#                         print item
-#                         raw_input('enter')
 
             except requests.exceptions.ConnectionError:
                 print("request failed.")
