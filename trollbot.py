@@ -102,10 +102,10 @@ def nomad_tweet():
 
 if __name__ == "__main__":
 
+    sv = open("text.txt", 'w')
     for o in monitor():
-
-        if o["lang"] == "en":
-            text = o["text"]
+        text = o["text"]
+        if o.get("lang", None) == "en":
             if nomad_finder(text) == True:
                 nomad_tweet()
 
@@ -121,3 +121,4 @@ if __name__ == "__main__":
 
                     tweet(emission, codes)
                     raw_input('enter')
+        sv.write(text.encode('ascii', 'ignore') + '\n')
