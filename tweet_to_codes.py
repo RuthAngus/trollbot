@@ -12,10 +12,10 @@ def tweet_to_codes(tweet):
     tweetcond = tweet.replace(' -> ', '->')
     tweetcond = tweetcond.replace(' - ', '-')
 
-    words1 = re.findall(r"([a-zA-Z]{3}->[a-zA-Z]{3})", tweetcond)
-    words2 = re.findall(r"([a-zA-Z]{3}-[a-zA-Z]{3})", tweetcond) 
+    words1 = re.findall(r"( [a-zA-Z]{3}->[a-zA-Z]{3} )", tweetcond)
+    words2 = re.findall(r"( [a-zA-Z]{3}-[a-zA-Z]{3} )", tweetcond) 
 
-    words = words1 + words2
+    words = words1 + words2 
    
     for i in xrange(len(words)):
         words_sh = words[i].replace('>','').split('-')
