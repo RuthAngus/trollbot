@@ -99,26 +99,26 @@ def nomad_tweet():
     time.sleep(5*60)
 #     api.update_status(sent)
 
-
 if __name__ == "__main__":
 
     sv = open("text.txt", 'w')
     for o in monitor():
         text = o["text"]
-        if o.get("lang", None) == "en":
-            if nomad_finder(text) == True:
-                nomad_tweet()
+#         if o.get("lang", None) == "en":
+        print nomad_finder(text)
+        if nomad_finder(text) == True:
+            nomad_tweet()
 
-            codes = tweet_to_codes(text)
+        codes = tweet_to_codes(text)
 
-            if len(codes) == 2 and codes[0] != codes[1]:
-                emission = airports_to_co2(codes[0], codes[1])
+        if len(codes) == 2 and codes[0] != codes[1]:
+            emission = airports_to_co2(codes[0], codes[1])
 
-                if emission > 0:
-                    print text
-                    print codes
-                    print emission
+            if emission > 0:
+                print text
+                print codes
+                print emission
 
-                    tweet(emission, codes)
-                    raw_input('enter')
+                tweet(emission, codes)
+                raw_input('enter')
         sv.write(text.encode('ascii', 'ignore') + '\n')
