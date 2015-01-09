@@ -99,15 +99,16 @@ def nomad_tweet():
 if __name__ == "__main__":
 
     iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
-    params = {"track": iapa[:100]}
+    params = {"track": iapa}
 
-    sv = open("text.txt", 'w')
+#     sv = open("text.txt", 'w')
     for o in monitor(params):
-        text = o["text"]
+#         text = o.get("text", None)
+        text = o.get("text", "blah")
         handle = o.get("user", {}).get("screen_name", None)
 #         if o.get("lang", None) == "en":
-        if nomad_finder(text) == True:
-            nomad_tweet()
+#         if nomad_finder(text) == True:
+#             nomad_tweet()
 
         codes = tweet_to_codes(text)
 
@@ -120,4 +121,4 @@ if __name__ == "__main__":
                 print emission
 
                 tweet(emission, codes, handle)
-        sv.write(text.encode('ascii', 'ignore') + '\n')
+#         sv.write(text.encode('ascii', 'ignore') + '\n')

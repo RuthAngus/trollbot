@@ -98,26 +98,14 @@ def nomad_tweet(handle):
 
 if __name__ == "__main__":
 
-    iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
     params = {"track": "academicnomad"}
 
     sv = open("text.txt", 'w')
     for o in monitor(params):
+        print o
         text = o["text"]
         handle = o.get("user", {}).get("screen_name", None)
-#         if o.get("lang", None) == "en":
-#         if nomad_finder(text) == True:
+        print text
         nomad_tweet()
 
-#         codes = tweet_to_codes(text)
-#
-#         if len(codes) == 2 and codes[0] != codes[1]:
-#             emission = airports_to_co2(codes[0], codes[1])
-#
-#             if emission > 0:
-#                 print text
-#                 print codes
-#                 print emission
-#
-#                 tweet(emission, codes, handle)
         sv.write(text.encode('ascii', 'ignore') + '\n')
