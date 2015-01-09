@@ -15,7 +15,7 @@ client_key, client_secret, user_key, user_secret = \
         np.genfromtxt("keys.txt", skip_header=1, dtype=str).T
 
 iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
-params = {"track": iapa[:100]}
+params = {"track": iapa}
 
 def monitor():
     wait = 0
