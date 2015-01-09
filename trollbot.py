@@ -66,7 +66,7 @@ def monitor(params):
 
         time.sleep(wait)
 
-def tweet(emission, codes, handle):
+def tweet(emission, codes, handle, uid):
 
     config = ConfigParser.ConfigParser()
     sect = "twitter"
@@ -76,12 +76,12 @@ def tweet(emission, codes, handle):
     auth.set_access_token(user_key, user_secret)
     api = tweepy.API(auth)
 
-    sent = "@%s I hear you're flying between %s and %s. Your carbon emissions will be %s Kg." \
+    sent = "@%s I hear you're flying between %s and %s. Your carbon emissions will be %s kg." \
             % (handle, codes[0], codes[1], int(emission))
     print sent
 
 #     time.sleep(5*60)
-    api.update_status(sent)
+    api.update_status(sent, uid)
 
 def nomad_tweet():
     config = ConfigParser.ConfigParser()
@@ -101,11 +101,13 @@ if __name__ == "__main__":
     iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
     params = {"track": iapa}
 
-#     sv = open("text.txt", 'w')
     for o in monitor(params):
 #         text = o.get("text", None)
         text = o.get("text", "blah")
         handle = o.get("user", {}).get("screen_name", None)
+        uid = o.get("id", None)
+        with open("tweets.txt", "a") as f:
+            f.write(text.encode("utf-8", "ignore") + "\n")
 #         if o.get("lang", None) == "en":
 #         if nomad_finder(text) == True:
 #             nomad_tweet()
@@ -120,5 +122,4 @@ if __name__ == "__main__":
                 print codes
                 print emission
 
-                tweet(emission, codes, handle)
-#         sv.write(text.encode('ascii', 'ignore') + '\n')
+                tweet(emission, codes, handle, uid)
