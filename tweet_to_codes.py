@@ -11,14 +11,14 @@ def tweet_to_codes(tweet):
     tweet = tweet.replace(';', '')
     tweet = tweet.replace('&gt', '>')
   #  words = re.findall(r"[\w']+", tweet)
-    tweet = tweet.replace('>', '')
-    tweet = tweet.replace(' - ', '-')
+    tweet = tweet.replace(' -> ', '->')
+   # tweet = tweet.replace(' - ', '-')
   
 
- #   words1 = re.findall(r"([a-zA-Z]{3}->[a-zA-Z]{3})", tweet)
-    words = re.findall(r"([a-zA-Z]{3}-[a-zA-Z]{3})", tweet) 
+    words1 = re.findall(r"([a-zA-Z]{3}->[a-zA-Z]{3})", tweet)
+    words2 = re.findall(r"([a-zA-Z]{3}-[a-zA-Z]{3})", tweet) 
 
-   # words = words1 + words2 
+    words = words1 + words2 
    
     for i in xrange(len(words)):
         words_sh = words[i].replace('>','').split('-')
@@ -40,6 +40,6 @@ def tweet_to_codes(tweet):
 
 if __name__ == "__main__":
 
-    out = tweet_to_codes('this is an example of an LHR -&gt; MDW tweet #ORD #BOS SEA-LAX')
+    out = tweet_to_codes('this is an example of an LHR -> MDW tweet #ORD #BOS SEA - LAX')
 
     print out
