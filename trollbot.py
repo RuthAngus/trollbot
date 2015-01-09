@@ -14,10 +14,7 @@ url = "https://stream.twitter.com/1.1/statuses/filter.json"
 client_key, client_secret, user_key, user_secret = \
         np.genfromtxt("keys.txt", skip_header=1, dtype=str).T
 
-iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
-params = {"track": iapa[:100]}
-
-def monitor():
+def monitor(params):
     wait = 0
     auth = OAuth1(client_key, client_secret, user_key, user_secret)
     while 1:
@@ -69,7 +66,7 @@ def monitor():
 
         time.sleep(wait)
 
-def tweet(emission, codes):
+def tweet(emission, codes, handle):
 
     config = ConfigParser.ConfigParser()
     sect = "twitter"
@@ -79,12 +76,12 @@ def tweet(emission, codes):
     auth.set_access_token(user_key, user_secret)
     api = tweepy.API(auth)
 
-    sent = "I hear you're flying between %s and %s. Your carbon emissions will be %s Kg." \
-            % (codes[0], codes[1], int(emission))
+    sent = "@%s I hear you're flying between %s and %s. Your carbon emissions will be %s Kg." \
+            % (handle, codes[0], codes[1], int(emission))
     print sent
 
-    time.sleep(5*60)
-#     api.update_status(sent)
+#     time.sleep(5*60)
+    api.update_status(sent)
 
 def nomad_tweet():
     config = ConfigParser.ConfigParser()
@@ -96,16 +93,19 @@ def nomad_tweet():
     trolls = np.genfromtxt("trollolol.txt", dtype=str)
     sent = "%s" % trolls[np.randint(0, len(trolls))]
     print sent
-    time.sleep(5*60)
-#     api.update_status(sent)
+#     time.sleep(5*60)
+    api.update_status(sent)
 
 if __name__ == "__main__":
 
+    iapa = np.genfromtxt("just_the_codes.txt", dtype=str).T
+    params = {"track": iapa[:100]}
+
     sv = open("text.txt", 'w')
-    for o in monitor():
+    for o in monitor(params):
         text = o["text"]
+        handle = o.get("user", {}).get("screen_name", None)
 #         if o.get("lang", None) == "en":
-        print nomad_finder(text)
         if nomad_finder(text) == True:
             nomad_tweet()
 
@@ -119,6 +119,5 @@ if __name__ == "__main__":
                 print codes
                 print emission
 
-                tweet(emission, codes)
-                raw_input('enter')
+                tweet(emission, codes, handle)
         sv.write(text.encode('ascii', 'ignore') + '\n')
