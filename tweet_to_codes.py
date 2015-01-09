@@ -1,7 +1,7 @@
 import re
 import numpy as np
 
-codes = np.genfromtxt('just_the_codes.txt', dtype=str)
+codes = np.genfromtxt('all_the_codes.txt', dtype=str)
 
 #print codes
 
@@ -26,8 +26,8 @@ def tweet_to_codes(tweet):
 
             for j in xrange(1, len(words_sh)):
                 if (words_sh[i-1] in codes) and (words_sh[i] in codes):
-                    out.append(words_sh[i-1])
                     out.append(words_sh[i])
+                    out.append(words_sh[i-i])
     except:
         pass
 
