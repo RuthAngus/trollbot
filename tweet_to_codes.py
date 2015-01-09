@@ -13,21 +13,24 @@ def tweet_to_codes(tweet):
   #  words = re.findall(r"[\w']+", tweet)
     tweet = tweet.replace(' -> ', '->')
    # tweet = tweet.replace(' - ', '-')
-  
+
 
     words1 = re.findall(r"([a-zA-Z]{3}->[a-zA-Z]{3})", tweet)
-    words2 = re.findall(r"([a-zA-Z]{3}-[a-zA-Z]{3})", tweet) 
+    words2 = re.findall(r"([a-zA-Z]{3}-[a-zA-Z]{3})", tweet)
 
-    words = words1 + words2 
-   
-    for i in xrange(len(words)):
-        words_sh = words[i].replace('>','').split('-')
-  
-        for j in xrange(1, len(words_sh)):
-            if (words_sh[i-1] in codes) and (words_sh[i] in codes):
-                out.append(words_sh[i-1])
-                out.append(words_sh[i])
-            
+    words = words1 + words2
+
+    try:
+        for i in xrange(len(words)):
+            words_sh = words[i].replace('>','').split('-')
+
+            for j in xrange(1, len(words_sh)):
+                if (words_sh[i-1] in codes) and (words_sh[i] in codes):
+                    out.append(words_sh[i-1])
+                    out.append(words_sh[i])
+    except:
+        pass
+
 
   #  for i in xrange(1, len(words)):
   #      if (words[i-1] in codes) and (words[i] in codes):
